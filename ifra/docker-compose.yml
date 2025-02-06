@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres
+    container_name: dnd_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dnd_db
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: .
+    container_name: dnd_backend
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/dnd_db
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: password
+    ports:
+      - "8080:8080"
