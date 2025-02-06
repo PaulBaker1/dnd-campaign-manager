@@ -1,0 +1,23 @@
+name: Automate Project Issues
+
+on:
+  issues:
+    types: [opened, closed]
+
+jobs:
+  update-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move Issue to "In Progress"
+        if: github.event.issue.state == 'open'
+        uses: actions/add-to-project@v1
+        with:
+          project-url: https://github.com/YOUR_USERNAME/dnd-campaign-manager/projects/1
+          column-name: In Progress
+
+      - name: Move Issue to "Done"
+        if: github.event.issue.state == 'closed'
+        uses: actions/add-to-project@v1
+        with:
+          project-url: https://github.com/YOUR_USERNAME/dnd-campaign-manager/projects/1
+          column-name: Done
