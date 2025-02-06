@@ -1,0 +1,26 @@
+name: Auto Label PRs
+
+on:
+  pull_request
+
+jobs:
+  label-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Label PR Based on Branch Type
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          if [[ $BRANCH_NAME == feature/* ]]; then
+            LABEL="feature"
+          elif [[ $BRANCH_NAME == bugfix/* ]]; then
+            LABEL="bugfix"
+          elif [[ $BRANCH_NAME == release/* ]]; then
+            LABEL="release"
+          elif [[ $BRANCH_NAME == hotfix/* ]]; then
+            LABEL="hotfix"
+          else
+            LABEL="unknown"
+          fi
+          gh pr edit ${{ github.event.pull_request.number }} --add-label "$LABEL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
