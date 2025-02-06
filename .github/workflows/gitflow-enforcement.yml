@@ -1,0 +1,27 @@
+name: Enforce GitFlow Rules
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  enforce-gitflow:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for Direct Commits
+        if: github.event_name == 'push'
+        run: |
+          echo "🚨 Direct commits to 'main' or 'develop' are NOT allowed!"
+          exit 1
+
+      - name: Enforce PR Requirements
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "✅ Pull Request detected! Proceeding with merge review..."
