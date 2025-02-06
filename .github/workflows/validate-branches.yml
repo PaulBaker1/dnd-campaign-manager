@@ -1,0 +1,16 @@
+name: Validate Branch Naming
+
+on:
+  create
+
+jobs:
+  check-branch-naming:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate Branch Naming
+        run: |
+          BRANCH_NAME="${{ github.ref }}"
+          if [[ ! $BRANCH_NAME =~ ^refs/heads/(feature|bugfix|release|hotfix)/ ]]; then
+            echo "❌ Invalid branch name! Follow GitFlow: feature/*, bugfix/*, release/*, hotfix/*"
+            exit 1
+          fi
